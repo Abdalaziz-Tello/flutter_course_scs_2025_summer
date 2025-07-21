@@ -2,7 +2,7 @@ import 'temp_varaibles.dart';
 
 int counter = 0;
 
-void main(List<String> args) {
+void main() {
   // ? What is the Varabile
   String messageOfMyPrograme = "Hello World";
   print(messageOfMyPrograme.runtimeType);
