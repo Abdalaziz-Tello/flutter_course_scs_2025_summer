@@ -78,7 +78,7 @@ class Fish extends Animal {
 
 @override
   walk() {
-    throw Exception("Sorry there is no fish can walk, pleas call swim function ");
+    throw Exception("Sorry there is no fish can walk, please call swim function ");
   }
 
   swim(){
