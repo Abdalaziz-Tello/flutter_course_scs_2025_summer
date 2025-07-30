@@ -1,75 +1,40 @@
-import 'dart:io';
-
+import 'package:dio/dio.dart';
 import 'package:restapi_intro/restapi_intro.dart';
 
-void main() async {
-  Future<String> newMessage = stayTuned();
+void main()async {
 
-  // ? #2
-  // String message =await stayTuned();
+// ? Service Layer Example
+Dio dio = Dio();
+Response response =await dio.get('http://jsonplaceholder.typicode.com/todos/1');
+print(response);
+print(response.data);
 
-  print("object");
-  // ? #3
-  print(newMessage);
 
-  // ? #2
-  // print(message);
+// ? Model Layer Example
+// print(response.data['title']);
+Todo todo = Todo.fromMap(response.data);
+print(todo);
 
-  // ? #1
-  // print(await stayTuned());
 
-  Object ob = Object();
-  print(ob);
+// ? Service Layer Example to Handle List of Data 
+Response responseAsList =await dio.get('http://jsonplaceholder.typicode.com/todos/');
 
-  Human human = Human(name: "Majd");
-  print(human);
-  print(human.toMap());
-  Map<String,dynamic> newMajd = {
-    "name":"Majodete"
-  };
-  File file = File(Directory.current.path+"/test.txt");
-  file.writeAsString(human.toString());
-  Human human1 = Human.fromMap(newMajd);
-  print(human1);
-
-  Function helpMe;
-  helpMe = (String message) {
-    print("New Help for you , ${message}");
-  };
-
-  List<int> someNumbers = [100,200,300];
-
-  someNumbers.forEach((element){
-    print(element);
-  });
-
-  helpMe("Hello Hello");
-
-  // ?  New Behavior
-  Function added = (int a) {
-    print(a + 1);
-  };
-
-  // ? New behavior
-  Function subbed = (int a) {
-    print(a - 1);
-  };
-  doAnything([1, 2, 3], added);
-
-  doAnything([1, 2, 3], subbed);
-
-  // ? Put print in doAnything to show the result
-  doAnything([1, 2, 3], (a) => a + 1);
+List<Todo> todos = [];
+for (var i = 0; i < responseAsList.data.length; i++) {
+  todos.add(Todo.fromMap(responseAsList.data[i]));
 }
+print(todos);
 
-// ? Main Function With Diffrenet Behavior
-doAnything(List<int> numbers, dynamic doSomething) {
-  for (var element in numbers) {
-    doSomething(element);
-  }
-}
 
-Future<String> stayTuned() async {
-  await Future.delayed(Duration(seconds: 2));
-  return "Hello World";
+
+Response response2 =await dio.get('http://jsonplaceholder.typicode.com/users/1');
+print(response2);
+print(response2.data);
+
+
+// ? Model Layer Example
+// print(response.data['title']);
+User user = User.fromMap(response2.data);
+print(user.address.geo.lat);
+
 }
