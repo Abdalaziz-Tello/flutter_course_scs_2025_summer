@@ -24,7 +24,7 @@ class FirstPage extends StatelessWidget {
         body: Image.network("https://avatars.githubusercontent.com/u/50756563"),
         appBar: AppBar(
           centerTitle: true,
-          actions: [FlutterLogo(),],
+          actions: [FlutterLogo()],
           title: Text("Hello World From First App"),
           leading: FlutterLogo(),
         ),
@@ -34,16 +34,19 @@ class FirstPage extends StatelessWidget {
   }
 }
 
-
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(child: Text("DUOLINGO",style: TextStyle(color: Colors.white,fontSize: 32),),),
+        body: Center(
+          child: Text(
+            "DUOLINGO",
+            style: TextStyle(color: Colors.white, fontSize: 32),
+          ),
+        ),
         backgroundColor: const Color.fromARGB(255, 94, 243, 99),
       ),
     );
   }
-
 }
