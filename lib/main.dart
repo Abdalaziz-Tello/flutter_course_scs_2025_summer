@@ -1,10 +1,18 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:service_solution/model/comment_model.dart';
-import 'package:service_solution/model/solution_number_one.dart';
-import 'package:service_solution/service/comment_service.dart';
+import 'package:service_solution/resource/app_string.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('ar')],
+      path: 'assets/translate', // <-- change the path of the translation files
+      fallbackLocale: Locale('en'),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +20,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomePageWithServiceLayer());
+    return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      home: HomePage(),
+    );
   }
 }
 
@@ -22,122 +35,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: StreamBuilder(
-          stream: getNumbers(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              print(snapshot.data);
-
-              return Text(
-                snapshot.data.toString(),
-                style: TextStyle(fontSize: 32),
-              );
-            } else {
-              return LinearProgressIndicator();
-            }
-          },
-        ),
-      ),
-    );
-  }
-}
-
-Stream<int> getNumbers() async* {
-  // int temp = 0;
-  for (var i = 0; i < 10000; i++) {
-    await Future.delayed(Duration(seconds: 1));
-    // temp = i;
-    yield i;
-  }
-}
-
-class HomePageWithNotifing extends StatelessWidget {
-  HomePageWithNotifing({super.key});
-
-  ValueNotifier<int> counter = ValueNotifier(0);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ValueListenableBuilder(
-          valueListenable: counter,
-          builder: (context, value, child) {
-            return Text(value.toString(), style: TextStyle(fontSize: 32));
-          },
-        ),
-      ),
-
+      appBar: AppBar(title: Text(AppString().title)),
       floatingActionButton: FloatingActionButton(
+        child: Text(AppString().title),
         onPressed: () {
-          counter.value++;
+          if (context.locale.languageCode == 'en') {
+            context.setLocale(Locale('ar'));
+          } else {
+            context.setLocale(Locale('en'));
+          }
         },
       ),
-    );
-  }
-}
-
-class HomePageWithBuilder extends StatelessWidget {
-  HomePageWithBuilder({super.key});
-  int counter = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: StatefulBuilder(
-          builder: (context, setstate) {
-            return InkWell(
-              onTap: () {
-                counter++;
-                setstate((){});
-              },
-
-              child: Text(counter.toString(), style: TextStyle(fontSize: 32)),
-            );
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // counter++;
-          // print(counter);
-        },
-      ),
-    );
-  }
-}
-
-
-class HomePageWithServiceLayer extends StatelessWidget {
-   HomePageWithServiceLayer({super.key});
-
-  CommentService commentService =CommentService();
-  ValueNotifier<ResultModel> comment = ValueNotifier(ResultModel());
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: ValueListenableBuilder(
-        valueListenable: comment,
-        builder: (context, value, child) {
-          
-          if (value is ErrorModel) {
-            return Text(value.message);
-          }
-          if (value is CommentModel) {
-            
-          return ListTile(
-            title: Text(value.name),
-            subtitle: Text(value.body),
-          );
-        }
-          return LinearProgressIndicator();
-          }
-      ),),
-      floatingActionButton: FloatingActionButton(onPressed: ()async{
-        comment.value=await commentService.getOneComment();
-      }),
+      body: Center(child: Text(AppString().docs, style: TextStyle(fontSize: 35))),
     );
   }
 }
