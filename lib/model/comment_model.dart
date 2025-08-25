@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class CommentModel {
+import 'package:flutter/widgets.dart';
+import 'package:service_solution/model/solution_number_one.dart';
+
+class CommentModel extends ResultModel{
   String name;
   String email;
   String body;

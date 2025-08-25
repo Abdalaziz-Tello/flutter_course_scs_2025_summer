@@ -113,7 +113,7 @@ class HomePageWithServiceLayer extends StatelessWidget {
    HomePageWithServiceLayer({super.key});
 
   CommentService commentService =CommentService();
-  ValueNotifier<CommentModelOrString> comment = ValueNotifier(CommentModelOrString(message: "Pleas Wait Until Data come", comment: null));
+  ValueNotifier<ResultModel> comment = ValueNotifier(ResultModel());
 
   @override
   Widget build(BuildContext context) {
@@ -121,14 +121,19 @@ class HomePageWithServiceLayer extends StatelessWidget {
       body: Center(child: ValueListenableBuilder(
         valueListenable: comment,
         builder: (context, value, child) {
-          if (value.comment == null) {
+          
+          if (value is ErrorModel) {
             return Text(value.message);
           }
+          if (value is CommentModel) {
+            
           return ListTile(
-            title: Text(value.comment!.name),
-            subtitle: Text(value.comment!.body),
+            title: Text(value.name),
+            subtitle: Text(value.body),
           );
         }
+          return LinearProgressIndicator();
+          }
       ),),
       floatingActionButton: FloatingActionButton(onPressed: ()async{
         comment.value=await commentService.getOneComment();

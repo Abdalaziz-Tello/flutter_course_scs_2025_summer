@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:service_solution/model/comment_model.dart';
+class ResultModel {
 
-class CommentModelOrString {
+}
+
+
+class ErrorModel extends ResultModel {
   String message;
-  CommentModel? comment;
-  CommentModelOrString({
+  ErrorModel({
     required this.message,
-    required this.comment,
   });
 }

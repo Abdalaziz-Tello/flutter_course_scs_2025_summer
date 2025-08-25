@@ -7,14 +7,14 @@ class CommentService {
   late Response response;
   String baseurl = "http://jsonplaceholder.typicode.com/comments/1";
 
-  Future<CommentModelOrString> getOneComment() async {
+  Future<ResultModel> getOneComment() async {
     try {
       response = await dio.get(baseurl);
       CommentModel comment = CommentModel.fromMap(response.data);
-      return CommentModelOrString(message: "", comment: comment);
+      return comment;
     } catch (e) {
       print(e);
-      return CommentModelOrString(message: "There is No Data", comment:null );
+      return ErrorModel(message: "There is No Data");
     }
   }
 }
