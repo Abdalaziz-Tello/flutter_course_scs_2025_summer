@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:graph_map_beyond_flutter/graphql/todo_service.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:latlong2/latlong.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,23 +23,30 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+   HomePage({super.key});
 
+MapController mapController = MapController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: FutureBuilder(future: getAllPosts(), builder:(context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) => 
-             Text(snapshot.data![index].title,style: TextStyle(fontSize: 28),),);
-          } else {
-            return CircularProgressIndicator();
-          }
-        },),
+     body:  FlutterMap(
+      mapController: mapController,
+    options: MapOptions(
+      initialCenter: LatLng(33.5132, 36.2768), // Center the map over London
+      initialZoom: 20,
+    ),
+    children: [
+      TileLayer( // Bring your own tiles
+        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', // For demonstration only
+        userAgentPackageName: 'com.graph.app', // Add your app identifier
+        // And many more recommended properties!
       ),
+      
+    ],
+  ),
+    floatingActionButton: FloatingActionButton(onPressed: (){
+      print(mapController.camera.center);
+    }),
     );
   }
 }
